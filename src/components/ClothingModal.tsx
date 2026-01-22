@@ -128,7 +128,7 @@ export function ClothingModal({ item, onClose }: ClothingModalProps) {
           </div>
 
           <div className="p-4 sm:p-6 md:p-8">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
             <div className="flex-1 min-w-0">
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 truncate">
                 {item.name}
@@ -146,7 +146,7 @@ export function ClothingModal({ item, onClose }: ClothingModalProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div className="bg-slate-700 p-3 sm:p-4 rounded-lg">
               <div className="flex items-center gap-1.5 sm:gap-2 text-gray-400 mb-1.5 sm:mb-2">
                 <Ruler className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
@@ -171,9 +171,9 @@ export function ClothingModal({ item, onClose }: ClothingModalProps) {
               <p className="text-white font-semibold text-base sm:text-lg truncate">{item.material}</p>
             </div>
 
-          </div>
+            </div>
 
-          <div className="border-t border-slate-700 pt-4 sm:pt-6">
+            <div className="border-t border-slate-700 pt-4 sm:pt-6">
             <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Item Details</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-300">
               <div>
@@ -190,6 +190,7 @@ export function ClothingModal({ item, onClose }: ClothingModalProps) {
                   {item.status === 'sold' ? 'Sold' : 'Available'}
                 </span>
               </div>
+            </div>
             </div>
           </div>
         </div>
