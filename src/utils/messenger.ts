@@ -1,23 +1,23 @@
-import { Vehicle } from '../lib/supabase';
+import { ClothingItem } from '../lib/supabase';
 import { SELLER_MESSENGER_USERNAME } from '../config/contact';
 
 /**
- * Generates a Facebook Messenger URL with pre-filled vehicle information
- * @param vehicle - The vehicle object to include in the message
+ * Generates a Facebook Messenger URL with pre-filled clothing item information
+ * @param item - The clothing item object to include in the message
  * @returns Facebook Messenger URL with encoded message
  */
-export function generateMessengerUrl(vehicle: Vehicle): string {
-  // Create a formatted message with vehicle details
-  const message = `Hi! I'm interested in this vehicle:
+export function generateMessengerUrl(item: ClothingItem): string {
+  // Create a formatted message with clothing item details
+  const message = `Hi! I'm interested in this item:
 
-🚗 ${vehicle.make} ${vehicle.model} (${vehicle.year})
-💰 Price: ₱${vehicle.price.toLocaleString()}
-📊 Mileage: ${vehicle.mileage}
-⚙️ Transmission: ${vehicle.transmission}
-⛽ Fuel Type: ${vehicle.fuel_type}
-📦 Category: ${vehicle.category}
+👕 ${item.brand} ${item.name}
+💰 Price: ₱${item.price.toLocaleString()}
+📏 Size: ${item.size}
+🎨 Color: ${item.color}
+🧵 Material: ${item.material}
+📦 Category: ${item.category}
 
-Could you please provide more information about this unit?`;
+Could you please provide more information about this item?`;
 
   // Encode the message for URL
   const encodedMessage = encodeURIComponent(message);

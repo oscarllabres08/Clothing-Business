@@ -1,88 +1,88 @@
 import { useState, useMemo } from 'react';
-import { Car, LogOut, Plus, Search, ChevronDown } from 'lucide-react';
-import { VehicleCard } from '../components/VehicleCard';
-import { VehicleFormModal } from '../components/VehicleFormModal';
+import { Shirt, LogOut, Plus, Search, ChevronDown } from 'lucide-react';
+import { ClothingCard } from '../components/ClothingCard';
+import { ClothingFormModal } from '../components/ClothingFormModal';
 import { useAuth } from '../contexts/AuthContext';
-import { useVehicles } from '../hooks/useVehicles';
-import { supabase, Vehicle } from '../lib/supabase';
+import { useClothingItems } from '../hooks/useClothingItems';
+import { supabase, ClothingItem } from '../lib/supabase';
 
-const CATEGORIES = ['All Categories', 'Sedan', 'Hatchback', 'SUV', 'Van', 'Pick up'];
+const CATEGORIES = ['All Categories', 'Men', 'Women', 'Kids', 'Accessories', 'Shoes'];
 const STATUSES = ['All Status', 'available', 'sold'];
 
 export function AdminDashboard() {
   const { signOut } = useAuth();
-  const { vehicles, loading, refetch } = useVehicles();
+  const { clothingItems, loading, refetch } = useClothingItems();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [selectedStatus, setSelectedStatus] = useState('All Status');
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
-  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
+  const [editingItem, setEditingItem] = useState<ClothingItem | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const filteredVehicles = useMemo(() => {
-    return vehicles.filter((vehicle) => {
+  const filteredItems = useMemo(() => {
+    return clothingItems.filter((item) => {
       const searchMatch =
         searchQuery === '' ||
-        vehicle.make.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        vehicle.model.toLowerCase().includes(searchQuery.toLowerCase());
+        item.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.name.toLowerCase().includes(searchQuery.toLowerCase());
       const categoryMatch =
-        selectedCategory === 'All Categories' || vehicle.category === selectedCategory;
+        selectedCategory === 'All Categories' || item.category === selectedCategory;
       const statusMatch =
-        selectedStatus === 'All Status' || vehicle.status === selectedStatus;
+        selectedStatus === 'All Status' || item.status === selectedStatus;
       return searchMatch && categoryMatch && statusMatch;
     });
-  }, [vehicles, searchQuery, selectedCategory, selectedStatus]);
+  }, [clothingItems, searchQuery, selectedCategory, selectedStatus]);
 
-  const handleAddVehicle = async (data: Partial<Vehicle>) => {
-    const { error } = await supabase.from('vehicles').insert([data]);
+  const handleAddItem = async (data: Partial<ClothingItem>) => {
+    const { error } = await supabase.from('clothing_items').insert([data]);
     if (error) {
-      console.error('Error adding vehicle:', error);
-      alert('Failed to add vehicle');
+      console.error('Error adding item:', error);
+      alert('Failed to add item');
     } else {
       setShowAddModal(false);
       refetch();
     }
   };
 
-  const handleUpdateVehicle = async (data: Partial<Vehicle>) => {
-    if (!editingVehicle) return;
+  const handleUpdateItem = async (data: Partial<ClothingItem>) => {
+    if (!editingItem) return;
     const { error } = await supabase
-      .from('vehicles')
+      .from('clothing_items')
       .update(data)
-      .eq('id', editingVehicle.id);
+      .eq('id', editingItem.id);
     if (error) {
-      console.error('Error updating vehicle:', error);
-      alert('Failed to update vehicle');
+      console.error('Error updating item:', error);
+      alert('Failed to update item');
     } else {
-      setEditingVehicle(null);
+      setEditingItem(null);
       refetch();
     }
   };
 
-  const handleDeleteVehicle = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this vehicle?')) return;
-    const { error } = await supabase.from('vehicles').delete().eq('id', id);
+  const handleDeleteItem = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this item?')) return;
+    const { error } = await supabase.from('clothing_items').delete().eq('id', id);
     if (error) {
-      console.error('Error deleting vehicle:', error);
-      alert('Failed to delete vehicle');
+      console.error('Error deleting item:', error);
+      alert('Failed to delete item');
     }
     else {
       refetch();
     }
   };
 
-  const handleToggleStatus = async (vehicle: Vehicle) => {
-    const nextStatus = vehicle.status === 'sold' ? 'available' : 'sold';
+  const handleToggleStatus = async (item: ClothingItem) => {
+    const nextStatus = item.status === 'sold' ? 'available' : 'sold';
 
     const { error } = await supabase
-      .from('vehicles')
+      .from('clothing_items')
       .update({ status: nextStatus })
-      .eq('id', vehicle.id);
+      .eq('id', item.id);
 
     if (error) {
-      console.error('Error updating vehicle status:', error);
-      alert('Failed to update vehicle status');
+      console.error('Error updating item status:', error);
+      alert('Failed to update item status');
     }
     else {
       refetch();
@@ -95,8 +95,8 @@ export function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <Car className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 flex-shrink-0" />
-              <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-white truncate">VELOCITY MOTORS</h1>
+              <Shirt className="w-6 h-6 sm:w-8 sm:h-8 text-rose-500 flex-shrink-0" />
+              <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-white truncate">FASHION BOUTIQUE</h1>
             </div>
             <button
               onClick={() => signOut()}
@@ -113,15 +113,15 @@ export function AdminDashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-blue-500 mb-2">Admin Dashboard</h2>
-            <p className="text-gray-400 text-base sm:text-lg">Manage your vehicle inventory.</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-rose-500 mb-2">Admin Dashboard</h2>
+            <p className="text-gray-400 text-base sm:text-lg">Manage your clothing inventory.</p>
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors w-full sm:w-auto"
+            className="flex items-center justify-center space-x-2 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg transition-colors w-full sm:w-auto"
           >
             <Plus className="w-5 h-5" />
-            <span>Add Vehicle</span>
+            <span>Add Item</span>
           </button>
         </div>
 
@@ -134,7 +134,7 @@ export function AdminDashboard() {
                 placeholder="Search inventory..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-slate-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-3 bg-slate-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
               />
             </div>
           </div>
@@ -157,7 +157,7 @@ export function AdminDashboard() {
                       setShowStatusDropdown(false);
                     }}
                     className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-colors ${
-                      selectedStatus === status ? 'bg-blue-600 text-white' : 'text-gray-300'
+                      selectedStatus === status ? 'bg-rose-600 text-white' : 'text-gray-300'
                     }`}
                   >
                     {status}
@@ -185,7 +185,7 @@ export function AdminDashboard() {
                       setShowCategoryDropdown(false);
                     }}
                     className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-colors ${
-                      selectedCategory === category ? 'bg-blue-600 text-white' : 'text-gray-300'
+                      selectedCategory === category ? 'bg-rose-600 text-white' : 'text-gray-300'
                     }`}
                   >
                     {category}
@@ -199,24 +199,24 @@ export function AdminDashboard() {
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-gray-400">Loading vehicles...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500 mx-auto mb-4"></div>
+              <p className="text-gray-400">Loading items...</p>
             </div>
           </div>
-        ) : filteredVehicles.length === 0 ? (
+        ) : filteredItems.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-gray-400 text-lg">No vehicles found matching your filters.</p>
+            <p className="text-gray-400 text-lg">No items found matching your filters.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredVehicles.map((vehicle) => (
-              <VehicleCard
-                key={vehicle.id}
-                vehicle={vehicle}
+            {filteredItems.map((item) => (
+              <ClothingCard
+                key={item.id}
+                item={item}
                 onViewDetails={() => {}}
                 showActions
-                onEdit={setEditingVehicle}
-                onDelete={handleDeleteVehicle}
+                onEdit={setEditingItem}
+                onDelete={handleDeleteItem}
                 onToggleStatus={handleToggleStatus}
               />
             ))}
@@ -225,18 +225,18 @@ export function AdminDashboard() {
       </main>
 
       {showAddModal && (
-        <VehicleFormModal
-          vehicle={null}
+        <ClothingFormModal
+          item={null}
           onClose={() => setShowAddModal(false)}
-          onSubmit={handleAddVehicle}
+          onSubmit={handleAddItem}
         />
       )}
 
-      {editingVehicle && (
-        <VehicleFormModal
-          vehicle={editingVehicle}
-          onClose={() => setEditingVehicle(null)}
-          onSubmit={handleUpdateVehicle}
+      {editingItem && (
+        <ClothingFormModal
+          item={editingItem}
+          onClose={() => setEditingItem(null)}
+          onSubmit={handleUpdateItem}
         />
       )}
     </div>

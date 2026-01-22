@@ -1,4 +1,4 @@
-import { Car, LogIn } from 'lucide-react';
+import { Shirt, LogIn } from 'lucide-react';
 
 interface HeaderProps {
   onAdminClick: () => void;
@@ -11,13 +11,13 @@ export function Header({ onAdminClick, showAdminButton = true }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 sm:space-x-3">
-            <Car className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 flex-shrink-0" />
-            <h1 className="text-lg sm:text-2xl font-bold tracking-tight truncate">CAR DEALERSHIP</h1>
+            <Shirt className="w-6 h-6 sm:w-8 sm:h-8 text-rose-500 flex-shrink-0" />
+            <h1 className="text-lg sm:text-2xl font-bold tracking-tight truncate">FASHION BOUTIQUE</h1>
           </div>
           {showAdminButton && (
             <button
               onClick={onAdminClick}
-              className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-sm sm:text-base flex-shrink-0"
+              className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors text-sm sm:text-base flex-shrink-0"
             >
               <LogIn className="w-4 h-4" />
               <span className="hidden sm:inline">Admin Login</span>

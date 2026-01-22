@@ -1,9 +1,9 @@
 import { ChevronDown, X } from 'lucide-react';
 import { useState } from 'react';
 
-const CATEGORIES = ['All', 'Sedan', 'Hatchback', 'SUV', 'Van', 'Pick up'];
+const CATEGORIES = ['All', 'Men', 'Women', 'Kids', 'Accessories', 'Shoes'];
 
-interface VehicleFiltersProps {
+interface ClothingFiltersProps {
   selectedCategory: string;
   selectedBrand: string;
   brands: string[];
@@ -11,19 +11,19 @@ interface VehicleFiltersProps {
   onBrandChange: (brand: string) => void;
 }
 
-export function VehicleFilters({
+export function ClothingFilters({
   selectedCategory,
   selectedBrand,
   brands,
   onCategoryChange,
   onBrandChange
-}: VehicleFiltersProps) {
+}: ClothingFiltersProps) {
   const [showBrandDropdown, setShowBrandDropdown] = useState(false);
 
   return (
     <div className="mb-8 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
-        <span className="text-gray-300 font-medium text-sm sm:text-base">Type:</span>
+        <span className="text-gray-300 font-medium text-sm sm:text-base">Category:</span>
         <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 scrollbar-hide">
           {CATEGORIES.map((category) => (
             <button
@@ -31,7 +31,7 @@ export function VehicleFilters({
               onClick={() => onCategoryChange(category)}
               className={`px-4 py-2 rounded-full font-medium transition-colors whitespace-nowrap text-sm sm:text-base ${
                 selectedCategory === category
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-rose-600 text-white'
                   : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
               }`}
             >
@@ -73,7 +73,7 @@ export function VehicleFilters({
                     setShowBrandDropdown(false);
                   }}
                   className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-colors ${
-                    selectedBrand === brand ? 'bg-blue-600 text-white' : 'text-gray-300'
+                    selectedBrand === brand ? 'bg-rose-600 text-white' : 'text-gray-300'
                   }`}
                 >
                   {brand}

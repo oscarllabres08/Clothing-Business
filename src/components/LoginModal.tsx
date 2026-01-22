@@ -48,7 +48,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
               placeholder="admin@example.com"
               required
             />
@@ -60,7 +60,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
               placeholder="••••••••"
               required
             />
@@ -75,7 +75,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+            className="w-full py-3 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-800 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>

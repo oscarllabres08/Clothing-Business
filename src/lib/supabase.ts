@@ -5,16 +5,15 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export interface Vehicle {
+export interface ClothingItem {
   id: string;
-  make: string;
-  model: string;
-  year: number;
+  brand: string;
+  name: string;
   price: number;
-  mileage: string;
+  size: string;
+  color: string;
   category: string;
-  transmission: string;
-  fuel_type: string;
+  material: string;
   image_url: string;
   status: string;
   created_at: string;
