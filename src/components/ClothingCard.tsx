@@ -29,8 +29,8 @@ export function ClothingCard({
           alt={item.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-3 right-3 flex gap-2">
-          <span className="px-3 py-1 bg-slate-700 text-white text-sm font-medium rounded-full">
+        <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex gap-1 sm:gap-2">
+          <span className="px-1.5 py-0.5 sm:px-3 sm:py-1 bg-slate-700 text-white text-[10px] sm:text-xs md:text-sm font-medium rounded-full">
             {item.category}
           </span>
           {isSold && (
@@ -40,8 +40,8 @@ export function ClothingCard({
           )}
         </div>
         {item.image_urls && item.image_urls.length > 1 && (
-          <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/60 text-white text-xs font-medium rounded">
-            +{item.image_urls.length - 1} more
+          <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 px-1.5 py-0.5 sm:px-2 sm:py-1 bg-black/60 text-white text-[10px] sm:text-xs font-medium rounded">
+            +{item.image_urls.length - 1}
           </div>
         )}
 
@@ -54,39 +54,39 @@ export function ClothingCard({
         )}
       </div>
 
-      <div className="p-4 sm:p-5">
-        <div className="flex items-start justify-between mb-3 sm:mb-4">
-          <div className="flex-1 min-w-0 pr-2">
-            <h3 className="text-lg sm:text-xl font-bold text-white truncate">
+      <div className="p-2 sm:p-4 md:p-5">
+        <div className="flex items-start justify-between mb-2 sm:mb-3 md:mb-4">
+          <div className="flex-1 min-w-0 pr-1 sm:pr-2">
+            <h3 className="text-sm sm:text-lg md:text-xl font-bold text-white truncate">
               {item.name}
             </h3>
-            <p className="text-gray-400 text-sm sm:text-base">{item.color}</p>
+            <p className="text-gray-400 text-xs sm:text-sm md:text-base">{item.color}</p>
           </div>
-          <p className="text-xl sm:text-2xl font-bold text-rose-500 flex-shrink-0">
+          <p className="text-base sm:text-xl md:text-2xl font-bold text-rose-500 flex-shrink-0">
             ₱{item.price.toLocaleString()}
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
-          <div className="flex items-center space-x-1 sm:space-x-2 text-gray-300">
-            <Ruler className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-            <span className="text-xs sm:text-sm truncate">{item.size}</span>
+        <div className="grid grid-cols-3 gap-1 sm:gap-2 md:gap-3 mb-2 sm:mb-3 md:mb-4">
+          <div className="flex items-center space-x-0.5 sm:space-x-1 md:space-x-2 text-gray-300">
+            <Ruler className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs md:text-sm truncate">{item.size}</span>
           </div>
-          <div className="flex items-center space-x-1 sm:space-x-2 text-gray-300">
-            <Palette className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-            <span className="text-xs sm:text-sm truncate">{item.color}</span>
+          <div className="flex items-center space-x-0.5 sm:space-x-1 md:space-x-2 text-gray-300">
+            <Palette className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs md:text-sm truncate">{item.color}</span>
           </div>
-          <div className="flex items-center space-x-1 sm:space-x-2 text-gray-300">
-            <Shirt className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-            <span className="text-xs sm:text-sm truncate">{item.material}</span>
+          <div className="flex items-center space-x-0.5 sm:space-x-1 md:space-x-2 text-gray-300">
+            <Shirt className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs md:text-sm truncate">{item.material}</span>
           </div>
         </div>
 
         {!showActions ? (
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <button
               onClick={() => onViewDetails(item)}
-              className="w-full py-2.5 sm:py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg transition-colors text-sm sm:text-base"
+              className="w-full py-1.5 sm:py-2.5 md:py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg transition-colors text-xs sm:text-sm md:text-base"
             >
               View Details
             </button>
@@ -94,9 +94,9 @@ export function ClothingCard({
               href={generateMessengerUrl(item)}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 sm:py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors text-sm sm:text-base flex items-center justify-center space-x-2"
+              className="w-full py-1.5 sm:py-2.5 md:py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors text-xs sm:text-sm md:text-base flex items-center justify-center space-x-1 sm:space-x-2"
             >
-              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+              <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
               <span>Message</span>
             </a>
           </div>
