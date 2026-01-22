@@ -1,5 +1,5 @@
 import { X, Shirt, Palette, Ruler, Calendar, Tag, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { ClothingItem } from '../lib/supabase';
 
 interface ClothingModalProps {
@@ -9,6 +9,9 @@ interface ClothingModalProps {
 
 export function ClothingModal({ item, onClose }: ClothingModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   if (!item) return null;
 
@@ -23,15 +26,60 @@ export function ClothingModal({ item, onClose }: ClothingModalProps) {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
+  // Swipe detection
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && hasMultipleImages) {
+      nextImage();
+    }
+    if (isRightSwipe && hasMultipleImages) {
+      prevImage();
+    }
+  };
+
+  const handleImageClick = () => {
+    setIsFullscreen(true);
+  };
+
+  const handleCloseFullscreen = () => {
+    setIsFullscreen(false);
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-2 sm:p-4">
-      <div className="bg-slate-800 rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
-        <div className="relative">
-          <img
-            src={images[currentImageIndex]}
-            alt={`${item.name} - Image ${currentImageIndex + 1}`}
-            className="w-full h-48 sm:h-64 md:h-96 object-cover rounded-t-xl sm:rounded-t-2xl"
-          />
+    <>
+      <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-2 sm:p-4">
+        <div className="bg-slate-800 rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+          <div className="relative">
+            <div
+              onClick={handleImageClick}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+              className="cursor-pointer select-none"
+            >
+              <img
+                src={images[currentImageIndex]}
+                alt={`${item.name} - Image ${currentImageIndex + 1}`}
+                className="w-full h-48 sm:h-64 md:h-96 object-cover rounded-t-xl sm:rounded-t-2xl"
+                draggable={false}
+              />
+            </div>
           <button
             onClick={onClose}
             className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 bg-slate-900 bg-opacity-80 hover:bg-opacity-100 rounded-full text-white transition-colors z-10"
@@ -146,6 +194,79 @@ export function ClothingModal({ item, onClose }: ClothingModalProps) {
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Fullscreen Image Viewer */}
+      {isFullscreen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-[60]"
+          onClick={handleCloseFullscreen}
+        >
+          <button
+            onClick={handleCloseFullscreen}
+            className="absolute top-4 right-4 p-3 bg-slate-900 bg-opacity-80 hover:bg-opacity-100 rounded-full text-white transition-colors z-10"
+          >
+            <X className="w-6 h-6 sm:w-8 sm:h-8" />
+          </button>
+
+          <div
+            className="relative w-full h-full flex items-center justify-center p-4"
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            <img
+              src={images[currentImageIndex]}
+              alt={`${item.name} - Image ${currentImageIndex + 1}`}
+              className="max-w-full max-h-full object-contain"
+              draggable={false}
+            />
+
+            {hasMultipleImages && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevImage();
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-slate-900 bg-opacity-80 hover:bg-opacity-100 rounded-full text-white transition-colors z-10"
+                >
+                  <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextImage();
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-slate-900 bg-opacity-80 hover:bg-opacity-100 rounded-full text-white transition-colors z-10"
+                >
+                  <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
+                </button>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  {images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex(index);
+                      }}
+                      className={`transition-all ${
+                        index === currentImageIndex
+                          ? 'bg-white w-8 h-2'
+                          : 'bg-white/50 hover:bg-white/75 w-2 h-2'
+                      } rounded-full`}
+                      aria-label={`Go to image ${index + 1}`}
+                    />
+                  ))}
+                </div>
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-black/60 text-white text-sm rounded z-10">
+                  {currentImageIndex + 1} / {images.length}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
