@@ -7,17 +7,17 @@ interface HeaderProps {
 
 export function Header({ onAdminClick, showAdminButton = true }: HeaderProps) {
   return (
-    <header className="bg-slate-900 text-white sticky top-0 z-50 border-b border-slate-800">
+    <header className="bg-white text-gray-900 sticky top-0 z-50 border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 sm:space-x-3">
-            <Shirt className="w-6 h-6 sm:w-8 sm:h-8 text-rose-500 flex-shrink-0" />
-            <h1 className="text-lg sm:text-2xl font-bold tracking-tight truncate">Oca Clothing</h1>
+            <Shirt className="w-6 h-6 sm:w-8 sm:h-8 text-sky-600 flex-shrink-0" />
+            <h1 className="text-lg sm:text-2xl font-bold tracking-tight truncate text-gray-900">Oca Clothing</h1>
           </div>
           {showAdminButton && (
             <button
               onClick={onAdminClick}
-              className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors text-sm sm:text-base flex-shrink-0"
+              className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg transition-colors text-sm sm:text-base flex-shrink-0 shadow-sm"
             >
               <LogIn className="w-4 h-4" />
               <span className="hidden sm:inline">Admin Login</span>

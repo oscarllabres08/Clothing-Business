@@ -143,33 +143,33 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-slate-800 rounded-2xl max-w-3xl w-full my-8">
-        <div className="p-6 border-b border-slate-700">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-3xl w-full my-8 shadow-2xl">
+        <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-white">
+            <h2 className="text-2xl font-bold text-gray-900">
               {item ? 'Edit Clothing Item' : 'Add New Clothing Item'}
             </h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-700 rounded-full transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <X className="w-6 h-6 text-gray-400" />
+              <X className="w-6 h-6 text-gray-600" />
             </button>
           </div>
-          <p className="text-gray-400 mt-1">
+          <p className="text-gray-600 mt-1">
             {item ? 'Update the clothing item details below.' : 'Enter the details for the new clothing item.'}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6">
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2 font-medium">Item Name</label>
+            <label className="block text-gray-700 mb-2 font-medium">Item Name</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+              className="w-full px-4 py-3 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
               placeholder="e.g. Classic T-Shirt"
               required
             />
@@ -177,11 +177,11 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-gray-300 mb-2 font-medium">Category</label>
+              <label className="block text-gray-700 mb-2 font-medium">Category</label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-4 py-3 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                 required
               >
                 {CATEGORIES.map((category) => (
@@ -193,12 +193,12 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
             </div>
 
             <div>
-              <label className="block text-gray-300 mb-2 font-medium">Price (₱)</label>
+              <label className="block text-gray-700 mb-2 font-medium">Price (₱)</label>
               <input
                 type="number"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: parseInt(e.target.value) })}
-                className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-4 py-3 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                 min="0"
                 required
               />
@@ -207,11 +207,11 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-gray-300 mb-2 font-medium">Size</label>
+              <label className="block text-gray-700 mb-2 font-medium">Size</label>
               <select
                 value={formData.size}
                 onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-4 py-3 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                 required
               >
                 {SIZES.map((size) => (
@@ -223,12 +223,12 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
             </div>
 
             <div>
-              <label className="block text-gray-300 mb-2 font-medium">Color</label>
+              <label className="block text-gray-700 mb-2 font-medium">Color</label>
               <input
                 type="text"
                 value={formData.color}
                 onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-4 py-3 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                 placeholder="e.g. Navy Blue"
                 required
               />
@@ -236,11 +236,11 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2 font-medium">Material</label>
+            <label className="block text-gray-700 mb-2 font-medium">Material</label>
             <select
               value={formData.material}
               onChange={(e) => setFormData({ ...formData, material: e.target.value })}
-              className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+              className="w-full px-4 py-3 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
               required
             >
               {MATERIALS.map((material) => (
@@ -252,7 +252,7 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-300 mb-2 font-medium">
+            <label className="block text-gray-700 mb-2 font-medium">
               Item Photos ({imagePreviews.length}/{MAX_IMAGES})
             </label>
             
@@ -268,7 +268,7 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-1 right-1 p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 p-1.5 bg-gray-500 hover:bg-gray-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -286,11 +286,11 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
                 accept="image/*"
                 multiple
                 onChange={handleImageSelect}
-                className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-rose-600 file:text-white hover:file:bg-rose-700"
+                className="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-700"
               />
             )}
 
-            <p className="mt-2 text-xs text-gray-400">
+            <p className="mt-2 text-xs text-gray-600">
               {imagePreviews.length === 0 
                 ? 'Upload up to 5 clear photos of the clothing item. On mobile, you can choose from your gallery or take new pictures.'
                 : `You can add ${MAX_IMAGES - imagePreviews.length} more image(s).`
@@ -301,7 +301,7 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-800 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+            className="w-full py-3 bg-sky-600 hover:bg-sky-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors shadow-sm"
           >
             {loading ? 'Saving...' : item ? 'Update Item' : 'Add Item'}
           </button>

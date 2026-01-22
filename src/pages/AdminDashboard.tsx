@@ -89,17 +89,17 @@ export function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <Shirt className="w-6 h-6 sm:w-8 sm:h-8 text-rose-500 flex-shrink-0" />
-              <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-white truncate">Oca Clothing</h1>
+              <Shirt className="w-6 h-6 sm:w-8 sm:h-8 text-sky-600 flex-shrink-0" />
+              <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-gray-900 truncate">Oca Clothing</h1>
             </div>
             <button
               onClick={() => signOut()}
-              className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm sm:text-base flex-shrink-0"
+              className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm sm:text-base flex-shrink-0 shadow-sm"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline">Exit Admin</span>
@@ -112,12 +112,12 @@ export function AdminDashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-rose-500 mb-2">Admin Dashboard</h2>
-            <p className="text-gray-400 text-base sm:text-lg">Manage your clothing inventory.</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-sky-600 mb-2">Admin Dashboard</h2>
+            <p className="text-gray-600 text-base sm:text-lg">Manage your clothing inventory.</p>
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center space-x-2 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg transition-colors w-full sm:w-auto"
+            className="flex items-center justify-center space-x-2 px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition-colors w-full sm:w-auto shadow-sm"
           >
             <Plus className="w-5 h-5" />
             <span>Add Item</span>
@@ -133,7 +133,7 @@ export function AdminDashboard() {
                 placeholder="Search inventory..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-slate-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full pl-10 pr-4 py-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm"
               />
             </div>
           </div>
@@ -141,13 +141,13 @@ export function AdminDashboard() {
           <div className="relative">
             <button
               onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-              className="flex items-center gap-2 px-4 py-3 bg-slate-800 text-gray-300 rounded-lg hover:bg-slate-700 transition-colors min-w-[150px] justify-between"
+              className="flex items-center gap-2 px-4 py-3 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors min-w-[150px] justify-between shadow-sm"
             >
               <span>{selectedStatus}</span>
               <ChevronDown className="w-4 h-4" />
             </button>
             {showStatusDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10">
+              <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                 {STATUSES.map((status) => (
                   <button
                     key={status}
@@ -155,8 +155,8 @@ export function AdminDashboard() {
                       setSelectedStatus(status);
                       setShowStatusDropdown(false);
                     }}
-                    className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-colors ${
-                      selectedStatus === status ? 'bg-rose-600 text-white' : 'text-gray-300'
+                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors ${
+                      selectedStatus === status ? 'bg-sky-600 text-white' : 'text-gray-700'
                     }`}
                   >
                     {status}
@@ -169,13 +169,13 @@ export function AdminDashboard() {
           <div className="relative">
             <button
               onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-              className="flex items-center gap-2 px-4 py-3 bg-slate-800 text-gray-300 rounded-lg hover:bg-slate-700 transition-colors min-w-[170px] justify-between"
+              className="flex items-center gap-2 px-4 py-3 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors min-w-[170px] justify-between shadow-sm"
             >
               <span>{selectedCategory}</span>
               <ChevronDown className="w-4 h-4" />
             </button>
             {showCategoryDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10">
+              <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                 {CATEGORIES.map((category) => (
                   <button
                     key={category}
@@ -183,8 +183,8 @@ export function AdminDashboard() {
                       setSelectedCategory(category);
                       setShowCategoryDropdown(false);
                     }}
-                    className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-colors ${
-                      selectedCategory === category ? 'bg-rose-600 text-white' : 'text-gray-300'
+                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors ${
+                      selectedCategory === category ? 'bg-sky-600 text-white' : 'text-gray-700'
                     }`}
                   >
                     {category}
@@ -198,13 +198,13 @@ export function AdminDashboard() {
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500 mx-auto mb-4"></div>
-              <p className="text-gray-400">Loading items...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading items...</p>
             </div>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-gray-400 text-lg">No items found matching your filters.</p>
+            <p className="text-gray-600 text-lg">No items found matching your filters.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
