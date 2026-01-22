@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useClothingItems } from '../hooks/useClothingItems';
 import { supabase, ClothingItem } from '../lib/supabase';
 
-const CATEGORIES = ['All Categories', 'Men', 'Women', 'Kids', 'Accessories', 'Shoes'];
+const CATEGORIES = ['All Categories', 'Men', 'Women', 'Unisex'];
 const STATUSES = ['All Status', 'available', 'sold'];
 
 export function AdminDashboard() {
@@ -24,7 +24,6 @@ export function AdminDashboard() {
     return clothingItems.filter((item) => {
       const searchMatch =
         searchQuery === '' ||
-        item.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase());
       const categoryMatch =
         selectedCategory === 'All Categories' || item.category === selectedCategory;

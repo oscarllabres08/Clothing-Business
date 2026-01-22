@@ -10,7 +10,7 @@ export function generateMessengerUrl(item: ClothingItem): string {
   // Create a formatted message with clothing item details
   const message = `Hi! I'm interested in this item:
 
-👕 ${item.brand} ${item.name}
+👕 ${item.name}
 💰 Price: ₱${item.price.toLocaleString()}
 📏 Size: ${item.size}
 🎨 Color: ${item.color}

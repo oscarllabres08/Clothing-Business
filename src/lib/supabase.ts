@@ -14,7 +14,7 @@ export interface ClothingItem {
   color: string;
   category: string;
   material: string;
-  image_url: string;
+  image_urls: string[]; // Array of up to 5 image URLs
   status: string;
   created_at: string;
   updated_at: string;

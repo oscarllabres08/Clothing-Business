@@ -11,30 +11,22 @@ import { ClothingItem } from '../lib/supabase';
 export function Showroom() {
   const { clothingItems, loading } = useClothingItems();
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedBrand, setSelectedBrand] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState<ClothingItem | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
-
-  const brands = useMemo(() => {
-    const uniqueBrands = Array.from(new Set(clothingItems.map((item) => item.brand))).sort();
-    return ['All', ...uniqueBrands];
-  }, [clothingItems]);
 
   const filteredItems = useMemo(() => {
     return clothingItems.filter((item) => {
       const categoryMatch =
         selectedCategory === 'All' || item.category === selectedCategory;
-      const brandMatch = selectedBrand === 'All' || item.brand === selectedBrand;
       const searchMatch =
         searchQuery.trim() === '' ||
-        item.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.color.toLowerCase().includes(searchQuery.toLowerCase());
       // Show both available and sold items; status is indicated on the card
-      return categoryMatch && brandMatch && searchMatch;
+      return categoryMatch && searchMatch;
     });
-  }, [clothingItems, selectedCategory, selectedBrand, searchQuery]);
+  }, [clothingItems, selectedCategory, searchQuery]);
 
   return (
     <div className="min-h-screen bg-slate-900">
@@ -54,7 +46,7 @@ export function Showroom() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search by brand, name, or color..."
+                placeholder="Search by name or color..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-slate-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 placeholder:text-gray-500 text-sm sm:text-base"
@@ -65,10 +57,10 @@ export function Showroom() {
 
         <ClothingFilters
           selectedCategory={selectedCategory}
-          selectedBrand={selectedBrand}
-          brands={brands}
+          selectedBrand="All"
+          brands={[]}
           onCategoryChange={setSelectedCategory}
-          onBrandChange={setSelectedBrand}
+          onBrandChange={() => {}}
         />
 
         {loading ? (

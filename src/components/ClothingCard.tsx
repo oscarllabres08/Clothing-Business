@@ -25,8 +25,8 @@ export function ClothingCard({
     <div className="bg-slate-800 rounded-xl overflow-hidden hover:ring-2 hover:ring-rose-500 transition-all">
       <div className="relative">
         <img
-          src={item.image_url}
-          alt={`${item.brand} ${item.name}`}
+          src={item.image_urls && item.image_urls.length > 0 ? item.image_urls[0] : '/placeholder.png'}
+          alt={item.name}
           className="w-full h-48 sm:h-56 object-cover"
         />
         <div className="absolute top-3 right-3 flex gap-2">
@@ -39,6 +39,11 @@ export function ClothingCard({
             </span>
           )}
         </div>
+        {item.image_urls && item.image_urls.length > 1 && (
+          <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/60 text-white text-xs font-medium rounded">
+            +{item.image_urls.length - 1} more
+          </div>
+        )}
 
         {isSold && !showActions && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
@@ -53,7 +58,7 @@ export function ClothingCard({
         <div className="flex items-start justify-between mb-3 sm:mb-4">
           <div className="flex-1 min-w-0 pr-2">
             <h3 className="text-lg sm:text-xl font-bold text-white truncate">
-              {item.brand} {item.name}
+              {item.name}
             </h3>
             <p className="text-gray-400 text-sm sm:text-base">{item.color}</p>
           </div>

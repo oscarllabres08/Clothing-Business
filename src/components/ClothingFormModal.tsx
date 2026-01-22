@@ -1,11 +1,17 @@
-import { X } from 'lucide-react';
+import { X, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { ClothingItem, supabase } from '../lib/supabase';
 
-const BRANDS = ['Nike', 'Adidas', 'Zara', 'H&M', 'Uniqlo', 'Forever 21', 'Gap', 'Levi\'s', 'Puma', 'Under Armour'];
-const CATEGORIES = ['Men', 'Women', 'Kids', 'Accessories', 'Shoes'];
+const CATEGORIES = ['Men', 'Women', 'Unisex'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size'];
 const MATERIALS = ['Cotton', 'Polyester', 'Denim', 'Wool', 'Silk', 'Linen', 'Leather', 'Synthetic'];
+const MAX_IMAGES = 5;
+
+interface ImagePreview {
+  file?: File;
+  url: string;
+  isExisting: boolean;
+}
 
 interface ClothingFormModalProps {
   item: ClothingItem | null;
@@ -15,73 +21,122 @@ interface ClothingFormModalProps {
 
 export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModalProps) {
   const [formData, setFormData] = useState({
-    brand: '',
     name: '',
+    category: 'Men',
     price: 0,
     size: 'M',
     color: '',
-    category: 'Men',
-    material: 'Cotton',
-    image_url: ''
+    material: 'Cotton'
   });
   const [loading, setLoading] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([]);
 
   useEffect(() => {
     if (item) {
       setFormData({
-        brand: item.brand,
         name: item.name,
+        category: item.category,
         price: item.price,
         size: item.size,
         color: item.color,
-        category: item.category,
-        material: item.material,
-        image_url: item.image_url
+        material: item.material
       });
-      setImagePreview(item.image_url);
+      // Load existing images
+      const existingImages: ImagePreview[] = (item.image_urls || []).map(url => ({
+        url,
+        isExisting: true
+      }));
+      setImagePreviews(existingImages);
     } else {
-      setImagePreview(null);
+      setImagePreviews([]);
     }
   }, [item]);
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const remainingSlots = MAX_IMAGES - imagePreviews.length;
+    
+    if (files.length > remainingSlots) {
+      alert(`You can only add ${remainingSlots} more image(s). Maximum ${MAX_IMAGES} images allowed.`);
+      return;
+    }
+
+    const newPreviews: ImagePreview[] = files.map(file => ({
+      file,
+      url: URL.createObjectURL(file),
+      isExisting: false
+    }));
+
+    setImagePreviews([...imagePreviews, ...newPreviews]);
+    e.target.value = ''; // Reset input
+  };
+
+  const removeImage = (index: number) => {
+    const preview = imagePreviews[index];
+    if (!preview.isExisting && preview.file) {
+      URL.revokeObjectURL(preview.url);
+    }
+    setImagePreviews(imagePreviews.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (imagePreviews.length === 0) {
+      alert('Please add at least one image.');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      let imageUrlToUse = formData.image_url;
+      const imageUrls: string[] = [];
 
-      // If a new image file was selected, upload it to Supabase Storage
-      if (imageFile) {
-        const fileExt = imageFile.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-        const filePath = `clothing/${fileName}.${fileExt}`;
+      // Upload new images first
+      for (const preview of imagePreviews) {
+        if (preview.isExisting) {
+          // Keep existing image URL
+          imageUrls.push(preview.url);
+        } else if (preview.file) {
+          // Upload new image
+          const fileExt = preview.file.name.split('.').pop();
+          const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+          const filePath = `clothing/${fileName}.${fileExt}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from('clothing-images')
-          .upload(filePath, imageFile);
+          const { error: uploadError } = await supabase.storage
+            .from('clothing-images')
+            .upload(filePath, preview.file);
 
-        if (uploadError) {
-          // eslint-disable-next-line no-alert
-          alert('Failed to upload image. Please try again.');
-          console.error('Image upload error:', uploadError);
-          setLoading(false);
-          return;
+          if (uploadError) {
+            alert(`Failed to upload image: ${preview.file.name}. Please try again.`);
+            console.error('Image upload error:', uploadError);
+            setLoading(false);
+            return;
+          }
+
+          const { data: publicUrlData } = supabase.storage
+            .from('clothing-images')
+            .getPublicUrl(filePath);
+
+          imageUrls.push(publicUrlData.publicUrl);
         }
-
-        const { data: publicUrlData } = supabase.storage
-          .from('clothing-images')
-          .getPublicUrl(filePath);
-
-        imageUrlToUse = publicUrlData.publicUrl;
       }
 
       await onSubmit({
         ...formData,
-        image_url: imageUrlToUse
+        brand: '', // Brand field removed from form, set to empty string
+        image_urls: imageUrls
       });
+
+      // Clean up object URLs
+      imagePreviews.forEach(preview => {
+        if (!preview.isExisting) {
+          URL.revokeObjectURL(preview.url);
+        }
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Failed to save item. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -108,24 +163,19 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
         </div>
 
         <form onSubmit={handleSubmit} className="p-6">
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-gray-300 mb-2 font-medium">Brand</label>
-              <select
-                value={formData.brand}
-                onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
-                required
-              >
-                <option value="">Select Brand</option>
-                {BRANDS.map((brand) => (
-                  <option key={brand} value={brand}>
-                    {brand}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="mb-4">
+            <label className="block text-gray-300 mb-2 font-medium">Item Name</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+              placeholder="e.g. Classic T-Shirt"
+              required
+            />
+          </div>
 
+          <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-gray-300 mb-2 font-medium">Category</label>
               <select
@@ -140,20 +190,6 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
                   </option>
                 ))}
               </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-gray-300 mb-2 font-medium">Item Name</label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
-                placeholder="e.g. Classic T-Shirt"
-                required
-              />
             </div>
 
             <div>
@@ -216,32 +252,49 @@ export function ClothingFormModal({ item, onClose, onSubmit }: ClothingFormModal
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-300 mb-2 font-medium">Item Photo</label>
-            {imagePreview && (
-              <div className="mb-3">
-                <img
-                  src={imagePreview}
-                  alt="Clothing item preview"
-                  className="w-full max-h-56 object-cover rounded-lg border border-slate-700"
-                />
+            <label className="block text-gray-300 mb-2 font-medium">
+              Item Photos ({imagePreviews.length}/{MAX_IMAGES})
+            </label>
+            
+            {imagePreviews.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
+                {imagePreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={preview.url}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-32 object-cover rounded-lg border border-slate-700"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-1 right-1 p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                    <div className="absolute bottom-1 left-1 px-2 py-0.5 bg-black/60 text-white text-xs rounded">
+                      {index + 1}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0] ?? null;
-                setImageFile(file);
-                if (file) {
-                  const previewUrl = URL.createObjectURL(file);
-                  setImagePreview(previewUrl);
-                }
-              }}
-              className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-rose-600 file:text-white hover:file:bg-rose-700"
-              required={!item}
-            />
+
+            {imagePreviews.length < MAX_IMAGES && (
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageSelect}
+                className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-rose-600 file:text-white hover:file:bg-rose-700"
+              />
+            )}
+
             <p className="mt-2 text-xs text-gray-400">
-              Upload a clear photo of the clothing item. On mobile, you can choose from your gallery or take a new picture.
+              {imagePreviews.length === 0 
+                ? 'Upload up to 5 clear photos of the clothing item. On mobile, you can choose from your gallery or take new pictures.'
+                : `You can add ${MAX_IMAGES - imagePreviews.length} more image(s).`
+              }
             </p>
           </div>
 
