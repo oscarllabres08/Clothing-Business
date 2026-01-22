@@ -12,7 +12,7 @@ export function Header({ onAdminClick, showAdminButton = true }: HeaderProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 sm:space-x-3">
             <Shirt className="w-6 h-6 sm:w-8 sm:h-8 text-rose-500 flex-shrink-0" />
-            <h1 className="text-lg sm:text-2xl font-bold tracking-tight truncate">FASHION BOUTIQUE</h1>
+            <h1 className="text-lg sm:text-2xl font-bold tracking-tight truncate">Oca Clothing</h1>
           </div>
           {showAdminButton && (
             <button
