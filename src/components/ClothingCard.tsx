@@ -23,11 +23,11 @@ export function ClothingCard({
 
   return (
     <div className="bg-slate-800 rounded-xl overflow-hidden hover:ring-2 hover:ring-rose-500 transition-all">
-      <div className="relative">
+      <div className="relative aspect-[3/4]">
         <img
           src={item.image_urls && item.image_urls.length > 0 ? item.image_urls[0] : '/placeholder.png'}
           alt={item.name}
-          className="w-full h-48 sm:h-56 object-cover"
+          className="w-full h-full object-cover"
         />
         <div className="absolute top-3 right-3 flex gap-2">
           <span className="px-3 py-1 bg-slate-700 text-white text-sm font-medium rounded-full">
